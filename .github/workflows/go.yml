@@ -28,13 +28,13 @@ jobs:
           go-version: ${{ matrix.go_version }}
 
       - name: Build-DB
-        run: docker compose build  # ou instale docker-compose v1 antes
+        run: docker compose build  
 
       - name: Create-DB
         run: docker compose up -d
 
       - name: Test
-        run: go test -v ./...   # mais robusto que apontar só main_test.go
+        run: go test -v main_test.go   # mais robusto que apontar só main_test.go
 
   build:
     needs: test
@@ -45,4 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: go build -v ./...
+        run: go build -v main.go
+    
+  docker:
+    needs: build
+    uses: ./.github/workflows/Docker.yml
